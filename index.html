@@ -30,6 +30,7 @@ body{
   color:var(--text);
   background:var(--white);
   -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
   overflow-x:hidden;
 }
 .inner{width:100%;max-width:var(--max);margin:0 auto;padding:0 var(--pad);}
@@ -86,7 +87,9 @@ body{
   margin-top:-92px;
 }
 .hero-stage{min-height:calc(100vh - 236px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 0 40px;}
-.hero-title{font-size:88px;line-height:90px;text-align:center;max-width:1180px;}
+/* letter-spacing scaled to match .display's original -2.6px/88px ratio (~-2.95%)
+   — the fixed -2.6px from .display reads cramped/rough at this smaller size */
+.hero-title{font-size:68px;line-height:72px;text-align:center;max-width:1180px;letter-spacing:-2px;}
 .hero-sub{margin-top:24px;font-size:20px;max-width:900px;text-align:center;line-height:32px;color:var(--sub);}
 .hero-form{margin-top:36px;width:100%;max-width:520px;display:flex;flex-direction:column;gap:10px;}
 .hero-input-row{
@@ -235,7 +238,7 @@ footer{border-top:1px solid var(--border);padding:28px 0;}
   :root{--pad:20px;}
   .hero-outer{margin-top:-66px;border-bottom-left-radius:24px;border-bottom-right-radius:24px;}
   .hero-stage{min-height:auto;padding:52px 0 24px;align-items:stretch;}
-  .hero-title{font-size:48px;line-height:52px;margin-top:22px;}
+  .hero-title{font-size:40px;line-height:44px;margin-top:22px;letter-spacing:-1.2px;}
   .hero-sub{font-size:18px;line-height:28px;}
   .hero-form{max-width:none;}
   .hero-input-row{flex-direction:column;align-items:stretch;padding:5px 16px;}
