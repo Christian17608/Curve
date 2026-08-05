@@ -6,5 +6,6 @@ node_modules/
 !.env.example
 *.log
 
-# Strategy doc — kept local, not published to the public repo
+# Strategy doc + system prompt — product IP, kept local, not published to the public repo
 PLAN.md
+prompts/

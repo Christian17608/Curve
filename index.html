@@ -48,15 +48,22 @@ body{
 .nav-outer.scrolled{padding-top:12px;}
 .nav-pill{
   display:flex;align-items:center;justify-content:space-between;position:relative;
-  width:100%;margin:0 auto;max-width:var(--max);
+  /* Full-bleed at rest — no max-width, so it spans edge-to-edge on any screen,
+     matching the hero gradient behind it. */
+  width:100%;margin:0 auto;
   border-radius:0;padding:18px 48px;
   background:rgba(255,255,255,0);border:1px solid rgba(255,255,255,0);
   box-shadow:0 0 0 rgba(0,0,0,0);
   transition:max-width .4s cubic-bezier(.22,1,.36,1),border-radius .4s ease,padding .35s ease,
-             background-color .35s ease,box-shadow .4s ease,border-color .35s ease,margin .4s cubic-bezier(.22,1,.36,1);
+             background-color .35s ease,box-shadow .4s ease,border-color .35s ease,margin .4s cubic-bezier(.22,1,.36,1),
+             width .4s cubic-bezier(.22,1,.36,1);
 }
 .nav-outer.scrolled .nav-pill{
-  max-width:1160px;margin:0 20px;border-radius:999px;padding:11px 24px;
+  /* `width: calc(100% - 40px)` + `margin: 0 auto` centers the pill AND
+     guarantees a 20px gutter on narrow screens — a bare `margin: 0 20px`
+     (the old rule) is NOT auto-centering: it just offsets the box 20px from
+     the left and dumps all the remaining space on the right. */
+  width:calc(100% - 40px);max-width:1160px;margin:0 auto;border-radius:999px;padding:11px 24px;
   background:rgba(255,255,255,.65);
   -webkit-backdrop-filter:blur(18px) saturate(180%);backdrop-filter:blur(18px) saturate(180%);
   border:1px solid rgba(255,255,255,.7);
@@ -245,7 +252,7 @@ footer{border-top:1px solid var(--border);padding:28px 0;}
   .trends-chart{max-width:none;}
   .step-title{font-size:18px;}
   .foot-row{flex-direction:column;align-items:flex-start;}
-  .nav-outer.scrolled .nav-pill{margin:0 12px;padding:10px 16px;}
+  .nav-outer.scrolled .nav-pill{width:calc(100% - 24px);margin:0 auto;padding:10px 16px;}
   .nav-pill{padding:14px 20px;}
 }
 </style>
