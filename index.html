@@ -45,7 +45,7 @@ body{
 .accent{color:var(--grey);}
 
 /* ── Nav (sticky, morphs to glass pill) ───────────────────────────── */
-.nav-outer{position:sticky;top:0;z-index:100;padding-top:0;background:transparent;transition:padding-top .3s ease;}
+.nav-outer{position:sticky;top:0;z-index:100;padding-top:0;background:transparent;transition:padding-top .5s cubic-bezier(.22,1,.36,1);}
 .nav-outer.scrolled{padding-top:12px;}
 .nav-pill{
   display:flex;align-items:center;justify-content:space-between;position:relative;
@@ -55,9 +55,9 @@ body{
   border-radius:0;padding:18px 48px;
   background:rgba(255,255,255,0);border:1px solid rgba(255,255,255,0);
   box-shadow:0 0 0 rgba(0,0,0,0);
-  transition:max-width .4s cubic-bezier(.22,1,.36,1),border-radius .4s ease,padding .35s ease,
-             background-color .35s ease,box-shadow .4s ease,border-color .35s ease,margin .4s cubic-bezier(.22,1,.36,1),
-             width .4s cubic-bezier(.22,1,.36,1);
+  transition:max-width .55s cubic-bezier(.22,1,.36,1),border-radius .5s ease,padding .5s ease,
+             background-color .5s ease,box-shadow .55s ease,border-color .5s ease,margin .55s cubic-bezier(.22,1,.36,1),
+             width .55s cubic-bezier(.22,1,.36,1);
 }
 .nav-outer.scrolled .nav-pill{
   /* `width: calc(100% - 40px)` + `margin: 0 auto` centers the pill AND
@@ -79,6 +79,13 @@ body{
   letter-spacing:.1px;cursor:pointer;transition:transform .18s ease,box-shadow .25s ease,background-color .2s ease;
 }
 .nav-btn:hover{background:#26262B;transform:translateY(-1px);box-shadow:0 8px 20px rgba(10,10,10,.18);}
+.nav-right{display:flex;align-items:center;gap:20px;}
+.nav-signin{
+  background:none;border:none;cursor:pointer;padding:0;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:var(--grey);
+  transition:color .2s ease;
+}
+.nav-signin:hover{color:var(--text);}
 
 /* ── Hero ─────────────────────────────────────────────────────────── */
 .hero-outer{
@@ -86,7 +93,12 @@ body{
   border-bottom-left-radius:40px;border-bottom-right-radius:40px;overflow:hidden;
   margin-top:-92px;
 }
-.hero-stage{min-height:calc(100vh - 236px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 0 40px;}
+/* min-height accounts for the sticky-nav overlap (~92px) plus the logo
+   marquee block that sits below this stage inside .hero-outer (~128px
+   measured) — together those should sum to ~viewport height so the hero
+   genuinely fills the screen instead of falling short and exposing a strip
+   of plain white before the next section. */
+.hero-stage{min-height:calc(100vh - 130px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 0 40px;}
 /* letter-spacing scaled to match .display's original -2.6px/88px ratio (~-2.95%)
    — the fixed -2.6px from .display reads cramped/rough at this smaller size */
 .hero-title{font-size:68px;line-height:72px;text-align:center;max-width:1180px;letter-spacing:-2px;}
@@ -273,7 +285,10 @@ footer{border-top:1px solid var(--border);padding:28px 0;}
       </div>
       <span class="logo-text">Curve.ai</span>
     </div>
-    <button class="nav-btn" onclick="goStart()">Get Started Free</button>
+    <div class="nav-right">
+      <button class="nav-signin" onclick="goSignIn()">Sign In</button>
+      <button class="nav-btn" onclick="goStart()">Get Started Free</button>
+    </div>
   </div>
 </div>
 
@@ -477,10 +492,13 @@ function goStart(){
   const v = document.getElementById('heroEmail').value.trim();
   console.log('get started', v);
 }
+function goSignIn(){
+  console.log('sign in');
+}
 
 /* ── Typewriter placeholder ───────────────────────────────────────── */
 (function(){
-  const TEXT = 'Enter your school email';
+  const TEXT = 'Enter your email';
   const ghost = document.getElementById('heroGhost');
   const ghostText = document.getElementById('ghostText');
   const caret = document.getElementById('caret');
