@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Curve.ai — An AI for every class you take.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── Tokens ───────────────────────────────────────────────────────── */
+:root{
+  --text:#0A0A0A;
+  --sub:#4B4B52;
+  --muted:#9A9AA2;
+  --border:#E4E4E7;
+  --border-soft:#EFEFF1;
+  --soft:#F4F4F5;
+  --soft2:#FAFAFA;
+  --white:#FFFFFF;
+  --accent:#0A0A0A;
+  --grey:#71717A;
+  --max:1560px;
+  --pad:48px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  color:var(--text);
+  background:var(--white);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+.inner{width:100%;max-width:var(--max);margin:0 auto;padding:0 var(--pad);}
+.inner-wide{max-width:1720px;}
+.display{font-family:'Geist',sans-serif;font-weight:600;letter-spacing:-2.6px;color:var(--text);}
+.h1{font-family:'Geist',sans-serif;font-weight:600;letter-spacing:-0.8px;}
+.h2{font-family:'Geist',sans-serif;font-weight:600;letter-spacing:-0.4px;}
+.h3{font-family:'Inter',sans-serif;font-weight:600;}
+.body{font-family:'Inter',sans-serif;font-weight:400;line-height:28px;color:var(--sub);}
+.section-divider{border-top:1px solid rgba(10,10,10,0.08);}
+.section-title{font-family:'Geist',sans-serif;font-weight:600;letter-spacing:-0.8px;font-size:42px;line-height:50px;color:var(--text);}
+.accent{color:var(--grey);}
+
+/* ── Nav (sticky, morphs to glass pill) ───────────────────────────── */
+.nav-outer{position:sticky;top:0;z-index:100;padding-top:0;background:transparent;transition:padding-top .3s ease;}
+.nav-outer.scrolled{padding-top:12px;}
+.nav-pill{
+  display:flex;align-items:center;justify-content:space-between;position:relative;
+  width:100%;margin:0 auto;max-width:var(--max);
+  border-radius:0;padding:18px 48px;
+  background:rgba(255,255,255,0);border:1px solid rgba(255,255,255,0);
+  box-shadow:0 0 0 rgba(0,0,0,0);
+  transition:max-width .4s cubic-bezier(.22,1,.36,1),border-radius .4s ease,padding .35s ease,
+             background-color .35s ease,box-shadow .4s ease,border-color .35s ease,margin .4s cubic-bezier(.22,1,.36,1);
+}
+.nav-outer.scrolled .nav-pill{
+  max-width:1160px;margin:0 20px;border-radius:999px;padding:11px 24px;
+  background:rgba(255,255,255,.65);
+  -webkit-backdrop-filter:blur(18px) saturate(180%);backdrop-filter:blur(18px) saturate(180%);
+  border:1px solid rgba(255,255,255,.7);
+  box-shadow:0 10px 34px rgba(10,10,10,.14);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.logo-mark{width:30px;height:30px;border-radius:9px;background:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-text{font-family:'Inter',sans-serif;font-weight:600;font-size:16px;color:var(--text);letter-spacing:-.2px;}
+.nav-btn{
+  background:var(--text);color:#fff;border:none;border-radius:10px;
+  padding:10px 18px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;
+  letter-spacing:.1px;cursor:pointer;transition:transform .18s ease,box-shadow .25s ease,background-color .2s ease;
+}
+.nav-btn:hover{background:#26262B;transform:translateY(-1px);box-shadow:0 8px 20px rgba(10,10,10,.18);}
+
+/* ── Hero ─────────────────────────────────────────────────────────── */
+.hero-outer{
+  background-image:linear-gradient(180deg,#FFFFFF 0%,#FAFAFA 32%,#F0F0F1 68%,#E3E3E6 100%);
+  border-bottom-left-radius:40px;border-bottom-right-radius:40px;overflow:hidden;
+  margin-top:-92px;
+}
+.hero-stage{min-height:calc(100vh - 236px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 0 40px;}
+.hero-title{font-size:88px;line-height:90px;text-align:center;max-width:1180px;}
+.hero-sub{margin-top:24px;font-size:20px;max-width:900px;text-align:center;line-height:32px;color:var(--sub);}
+.hero-form{margin-top:36px;width:100%;max-width:520px;display:flex;flex-direction:column;gap:10px;}
+.hero-input-row{
+  display:flex;align-items:center;border:1.5px solid var(--border);border-radius:14px;
+  background:#fff;padding:5px 5px 5px 16px;transition:border-color .2s ease,box-shadow .3s ease;
+}
+.hero-input-row:focus-within{border-color:var(--text);box-shadow:0 0 0 4px rgba(10,10,10,.06);}
+.hero-input-wrap{flex:1;position:relative;display:flex;align-items:center;}
+.hero-input{flex:1;border:none;outline:none;font-family:'Inter',sans-serif;font-size:16px;color:var(--text);padding:10px 0;background:transparent;}
+.hero-ghost{position:absolute;left:0;right:0;pointer-events:none;font-size:16px;color:var(--muted);font-family:'Inter',sans-serif;}
+.hero-ghost.hide{display:none;}
+.caret{opacity:1;}
+.caret.off{opacity:0;}
+.hero-inline-btn{
+  background:var(--text);color:#fff;border:none;border-radius:10px;padding:12px 22px;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:15px;cursor:pointer;white-space:nowrap;
+  transition:background-color .2s ease,transform .18s ease;
+}
+.hero-inline-btn:hover{background:#26262B;transform:translateY(-1px);}
+.hero-note{color:var(--muted);font-size:13px;text-align:center;}
+/* ── College logo marquee (sits on the hero gradient) ─────────────── */
+.logos{padding:0 0 60px;overflow:hidden;}
+.logos-eyebrow{text-align:center;font-family:'Inter',sans-serif;font-weight:600;font-size:12px;letter-spacing:1.6px;color:var(--muted);margin-bottom:26px;}
+/* Mask (not an overlay colour) so the fade works over the gradient.
+   Fade zone is a fixed 260px — wider than one logo — so wordmarks dissolve
+   instead of getting sliced mid-word. Percentages break at wide viewports. */
+.logos-view{
+  position:relative;overflow:hidden;
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 260px,#000 calc(100% - 260px),transparent 100%);
+          mask-image:linear-gradient(to right,transparent 0,#000 260px,#000 calc(100% - 260px),transparent 100%);
+}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.logos-track{display:flex;align-items:center;width:max-content;animation:marquee 84s linear infinite;will-change:transform;}
+.logos-track:hover{animation-play-state:paused;}
+.logo-item{
+  display:flex;align-items:center;gap:11px;padding:0 38px;flex-shrink:0;
+  opacity:.38;transition:opacity .3s ease;
+}
+.logo-item:hover{opacity:.9;}
+.logo-item svg{flex-shrink:0;}
+.logo-item .lw{display:flex;flex-direction:column;line-height:1.15;}
+.logo-item .lw b{font-family:'Geist',sans-serif;font-weight:600;font-size:15px;letter-spacing:-.3px;color:var(--text);white-space:nowrap;}
+.logo-item .lw i{font-family:'Inter',sans-serif;font-style:normal;font-weight:500;font-size:9px;letter-spacing:1.3px;color:var(--muted);white-space:nowrap;}
+@media (prefers-reduced-motion:reduce){.logos-track{animation:none;}}
+
+/* ── Reveal ───────────────────────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .62s ease,transform .62s cubic-bezier(.22,1,.36,1);}
+.reveal.in{opacity:1;transform:none;}
+
+/* ── Feature showcase ─────────────────────────────────────────────── */
+.showcase{display:flex;gap:36px;align-items:center;width:100%;}
+.feature-menu{width:300px;display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
+.feature-btn{
+  display:flex;align-items:center;justify-content:space-between;text-align:left;
+  padding:14px 18px;border-radius:12px;background:#fff;border:1px solid var(--border);
+  cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:var(--text);
+  box-shadow:0 1px 3px rgba(10,10,10,.04);
+  transition:background-color .2s ease,box-shadow .28s ease,border-color .2s ease,color .2s ease;
+}
+.feature-btn .arrow{font-weight:600;font-size:16px;color:var(--border);transition:color .2s ease;}
+.feature-btn.active{
+  color:#fff;border-color:var(--text);
+  background-image:linear-gradient(135deg,#3F3F46 0%,#1F1F23 55%,#0A0A0A 100%);
+  box-shadow:0 12px 28px rgba(10,10,10,.28);
+}
+.feature-btn.active .arrow{color:#fff;}
+.feature-stage-wrap{flex:1;min-width:0;}
+.feature-stage{width:100%;aspect-ratio:600/462;display:flex;align-items:center;justify-content:center;position:relative;}
+.feature-stage svg{width:100%;display:block;}
+.feature-caption{font-family:'Inter',sans-serif;font-size:15px;color:var(--sub);text-align:center;max-width:620px;margin:20px auto 0;line-height:23px;}
+.feature-fade{animation:fadein .32s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ── Pillars ──────────────────────────────────────────────────────── */
+.pillar-row{display:flex;gap:24px;}
+.pillar{
+  flex:1;border-radius:24px;padding:34px;min-height:244px;overflow:hidden;background:#fff;
+  border:1px solid var(--border);box-shadow:0 4px 16px rgba(10,10,10,.05);
+  opacity:0;transform:translateY(46px);
+  transition:opacity .6s ease,transform .7s cubic-bezier(.22,1,.36,1),border-color .3s ease,box-shadow .4s ease;
+}
+.pillar.in{opacity:1;transform:none;}
+.pillar:hover{border-color:rgba(10,10,10,.28);box-shadow:0 24px 56px rgba(10,10,10,.12);}
+.pillar-n{font-family:'Geist',sans-serif;font-weight:600;font-size:44px;color:rgba(10,10,10,.16);letter-spacing:-1.5px;margin-bottom:14px;}
+.pillar-t{font-family:'Geist',sans-serif;font-weight:600;font-size:23px;color:var(--text);letter-spacing:-.4px;margin-bottom:12px;}
+.pillar-b{font-family:'Inter',sans-serif;font-size:15px;color:var(--sub);line-height:24px;}
+
+/* ── Trends section ───────────────────────────────────────────────── */
+.trends-row{display:flex;gap:56px;align-items:center;}
+.trends-copy{flex:1;}
+.trends-chart{flex:1;max-width:480px;}
+.check-row{display:flex;align-items:flex-start;gap:14px;margin-top:14px;}
+.check-rule{width:14px;height:2px;border-radius:1px;background:var(--text);flex-shrink:0;margin-top:12px;}
+.check-row span{font-family:'Inter',sans-serif;font-size:16px;color:var(--sub);line-height:24px;}
+.chart-card{background:#fff;border-radius:20px;padding:24px;border:1px solid var(--border);box-shadow:0 10px 28px rgba(10,10,10,.07);}
+.chart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.chart-title{font-family:'Geist',sans-serif;font-weight:600;font-size:15px;color:var(--text);}
+.chart-badge{background:var(--soft);border:1px solid var(--border);border-radius:100px;padding:4px 10px;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;color:var(--text);}
+.chart-sub{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);margin-bottom:16px;}
+.pill-row{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap;}
+.pill{border-radius:100px;padding:5px 12px;border:1px solid var(--border);background:var(--soft2);font-family:'Inter',sans-serif;font-weight:500;font-size:12px;color:var(--sub);}
+.pill.on{background:var(--text);border-color:var(--text);color:#fff;}
+.stat-row{display:flex;gap:12px;margin-top:14px;}
+.stat{flex:1;background:#fff;border-radius:14px;padding:16px;border:1px solid var(--border);}
+.stat .k{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);}
+.stat .v{font-family:'Geist',sans-serif;font-weight:600;font-size:22px;margin-top:4px;color:var(--text);}
+.stat .n{font-family:'Inter',sans-serif;font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* ── Steps ────────────────────────────────────────────────────────── */
+.steps{width:100%;border-top:1px solid var(--border);}
+.step{display:flex;gap:24px;padding:28px 0;border-bottom:1px solid var(--border);align-items:flex-start;}
+.step-badge{
+  width:36px;height:36px;border-radius:18px;background:var(--soft);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;
+  font-family:'Geist',sans-serif;font-weight:600;font-size:15px;color:var(--text);
+}
+.step-title{font-family:'Geist',sans-serif;font-weight:600;font-size:21px;color:var(--text);line-height:26px;}
+.step-body{font-family:'Inter',sans-serif;font-size:16px;color:var(--sub);margin-top:6px;line-height:26px;}
+.step-cta{
+  margin-top:16px;background:var(--text);color:#fff;border:none;border-radius:10px;padding:13px 24px;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:15px;cursor:pointer;transition:background-color .2s ease,transform .18s ease;
+}
+.step-cta:hover{background:#26262B;transform:translateY(-1px);}
+
+/* ── CTA + Footer ─────────────────────────────────────────────────── */
+.cta-btn{
+  background:var(--text);color:#fff;border:none;border-radius:12px;padding:16px 32px;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:16px;cursor:pointer;
+  transition:background-color .2s ease,transform .18s ease,box-shadow .25s ease;
+}
+.cta-btn:hover{background:#26262B;transform:translateY(-2px);box-shadow:0 14px 32px rgba(10,10,10,.22);}
+.cta-ghost{
+  background:#fff;color:var(--text);border:1.5px solid var(--border);border-radius:12px;padding:15px 30px;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:16px;cursor:pointer;transition:border-color .2s ease,transform .18s ease;
+}
+.cta-ghost:hover{border-color:var(--text);transform:translateY(-2px);}
+footer{border-top:1px solid var(--border);padding:28px 0;}
+.foot-row{display:flex;justify-content:space-between;align-items:center;gap:16px;}
+.foot-brand{display:flex;align-items:center;gap:8px;}
+.foot-brand .logo-mark{width:22px;height:22px;border-radius:6px;}
+.foot-brand span{font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:var(--text);}
+.foot-copy{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);}
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+@media (max-width:1023px){
+  :root{--pad:20px;}
+  .hero-outer{margin-top:-66px;border-bottom-left-radius:24px;border-bottom-right-radius:24px;}
+  .hero-stage{min-height:auto;padding:52px 0 24px;align-items:stretch;}
+  .hero-title{font-size:48px;line-height:52px;margin-top:22px;}
+  .hero-sub{font-size:18px;line-height:28px;}
+  .hero-form{max-width:none;}
+  .hero-input-row{flex-direction:column;align-items:stretch;padding:5px 16px;}
+  .hero-inline-btn{margin-top:8px;padding:16px;border-radius:14px;}
+  .section-title{font-size:30px;line-height:38px;}
+  .showcase{flex-direction:column;}
+  .feature-menu{width:100%;}
+  .feature-stage{display:none;}
+  .feature-caption{display:none;}
+  .pillar-row{flex-direction:column;gap:16px;}
+  .pillar{padding:26px;min-height:auto;}
+  .pillar-t{font-size:20px;}
+  .trends-row{flex-direction:column;gap:32px;align-items:stretch;}
+  .trends-chart{max-width:none;}
+  .step-title{font-size:18px;}
+  .foot-row{flex-direction:column;align-items:flex-start;}
+  .nav-outer.scrolled .nav-pill{margin:0 12px;padding:10px 16px;}
+  .nav-pill{padding:14px 20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Nav ─────────────────────────────────────────────────────────── -->
+<div class="nav-outer" id="navOuter">
+  <div class="nav-pill">
+    <div class="nav-logo">
+      <div class="logo-mark">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none">
+          <path d="M3 15.5C5.5 15.5 6.5 4.5 10 4.5C13.5 4.5 14.5 15.5 17 15.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="logo-text">Curve.ai</span>
+    </div>
+    <button class="nav-btn" onclick="goStart()">Get Started Free</button>
+  </div>
+</div>
+
+<!-- ── Hero ────────────────────────────────────────────────────────── -->
+<section class="hero-outer">
+  <div class="inner">
+    <div class="hero-stage">
+      <h1 class="display hero-title">Get ahead of the grading curve.</h1>
+      <p class="body hero-sub">
+        An AI for every class you take — trained on your syllabus, slide decks, notes, and past exams.
+        Record the lecture, and Curve turns it into master notes, flashcards, and practice tests that actually match your course.
+      </p>
+      <form class="hero-form" onsubmit="event.preventDefault();goStart();">
+        <div class="hero-input-row">
+          <div class="hero-input-wrap">
+            <input class="hero-input" id="heroEmail" type="email" autocomplete="email" />
+            <div class="hero-ghost" id="heroGhost"><span id="ghostText"></span><span class="caret" id="caret">|</span></div>
+          </div>
+          <button class="hero-inline-btn" type="submit">Sign up for free</button>
+        </div>
+        <div class="hero-note">Free while you're a student — no credit card required</div>
+      </form>
+    </div>
+  </div>
+  <!-- ── College logo marquee (on the gradient) ── -->
+  <div class="logos">
+    <div class="logos-eyebrow">STUDENTS FROM CAMPUSES ACROSS THE COUNTRY</div>
+    <div class="logos-view">
+      <div class="logos-track" id="logosTrack"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Product showcase ────────────────────────────────────────────── -->
+<div class="reveal section-divider">
+  <div class="inner inner-wide" style="padding-top:84px;padding-bottom:84px;display:flex;flex-direction:column;align-items:center;">
+    <h2 class="section-title" style="text-align:center;margin-bottom:52px;">Built to actually understand your class.</h2>
+    <div class="showcase">
+      <div class="feature-menu" id="featureMenu"></div>
+      <div class="feature-stage-wrap">
+        <div class="feature-stage" id="featureStage"></div>
+        <p class="feature-caption" id="featureCaption"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Pillars ─────────────────────────────────────────────────────── -->
+<div class="section-divider">
+  <div class="inner" style="padding-top:96px;padding-bottom:96px;">
+    <h2 class="section-title" style="text-align:center;margin-bottom:14px;font-size:44px;">Generic AI doesn't know your professor.</h2>
+    <p class="body" style="font-size:17px;text-align:center;max-width:640px;margin:0 auto 56px;">
+      A general chatbot answers from the internet. Curve answers from your syllabus, your slides, your professor's own emphasis — and shows you exactly which page it came from.
+    </p>
+    <div class="pillar-row" id="pillarRow"></div>
+  </div>
+</div>
+
+<!-- ── Mastery / progress ──────────────────────────────────────────── -->
+<div class="reveal section-divider">
+  <div class="inner" style="padding-top:88px;padding-bottom:88px;">
+    <div class="trends-row">
+      <div class="trends-copy">
+        <h2 class="section-title" style="font-size:40px;line-height:48px;">
+          See what you actually know<br><span class="accent">before the exam does.</span>
+        </h2>
+        <p class="body" style="margin-top:18px;font-size:17px;max-width:420px;">
+          Every quiz, flashcard, and practice exam feeds one mastery score per unit. Curve tracks it over the semester so you know
+          exactly where you're solid and where you're about to get burned.
+        </p>
+        <p class="body" style="margin-top:14px;font-size:17px;max-width:420px;">
+          No more re-reading the chapter you already know. Curve puts your study time where the gap is.
+        </p>
+        <div id="checkList"></div>
+      </div>
+      <div class="trends-chart">
+        <div class="chart-card">
+          <div class="chart-head">
+            <span class="chart-title">Mastery — BIOL 240</span>
+            <span class="chart-badge">↑ 41 pts</span>
+          </div>
+          <div class="chart-sub">This semester · % of unit objectives mastered</div>
+          <svg viewBox="0 0 380 190" style="width:100%;height:180px;display:block;overflow:visible;">
+            <g>
+              <line x1="44" y1="132.67" x2="364" y2="132.67" stroke="#F1F1F3" stroke-width="1"/>
+              <text x="38" y="136.67" text-anchor="end" font-size="10" fill="#9A9AA2" font-family="Inter,sans-serif">40%</text>
+              <line x1="44" y1="109.33" x2="364" y2="109.33" stroke="#F1F1F3" stroke-width="1"/>
+              <text x="38" y="113.33" text-anchor="end" font-size="10" fill="#9A9AA2" font-family="Inter,sans-serif">50%</text>
+              <line x1="44" y1="86" x2="364" y2="86" stroke="#F1F1F3" stroke-width="1"/>
+              <text x="38" y="90" text-anchor="end" font-size="10" fill="#9A9AA2" font-family="Inter,sans-serif">60%</text>
+              <line x1="44" y1="62.67" x2="364" y2="62.67" stroke="#F1F1F3" stroke-width="1"/>
+              <text x="38" y="66.67" text-anchor="end" font-size="10" fill="#9A9AA2" font-family="Inter,sans-serif">70%</text>
+              <line x1="44" y1="39.33" x2="364" y2="39.33" stroke="#F1F1F3" stroke-width="1"/>
+              <text x="38" y="43.33" text-anchor="end" font-size="10" fill="#9A9AA2" font-family="Inter,sans-serif">80%</text>
+            </g>
+            <path d="M 44 128 C 72.8 128 79.2 107 108 107 C 136.8 107 143.2 90.67 172 90.67 C 200.8 90.67 207.2 69.67 236 69.67 C 264.8 69.67 271.2 53.33 300 53.33 C 328.8 53.33 335.2 32.33 364 32.33 L 364 156 L 44 156 Z" fill="#0A0A0A" fill-opacity="0.06"/>
+            <path d="M 44 128 C 72.8 128 79.2 107 108 107 C 136.8 107 143.2 90.67 172 90.67 C 200.8 90.67 207.2 69.67 236 69.67 C 264.8 69.67 271.2 53.33 300 53.33 C 328.8 53.33 335.2 32.33 364 32.33" fill="none" stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="44" cy="128" r="4" fill="#fff" stroke="#0A0A0A" stroke-width="2"/>
+            <circle cx="108" cy="107" r="4" fill="#fff" stroke="#0A0A0A" stroke-width="2"/>
+            <circle cx="172" cy="90.67" r="4" fill="#fff" stroke="#0A0A0A" stroke-width="2"/>
+            <circle cx="236" cy="69.67" r="4" fill="#fff" stroke="#0A0A0A" stroke-width="2"/>
+            <circle cx="300" cy="53.33" r="4" fill="#fff" stroke="#0A0A0A" stroke-width="2"/>
+            <circle cx="364" cy="32.33" r="8" fill="#0A0A0A" fill-opacity="0.12"/>
+            <circle cx="364" cy="32.33" r="4" fill="#fff" stroke="#0A0A0A" stroke-width="2"/>
+            <text x="364" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#0A0A0A" font-family="Inter,sans-serif">83%</text>
+            <text x="44" y="172" text-anchor="middle" font-size="10" fill="#9A9AA2" font-family="Inter,sans-serif">Sep</text>
+            <text x="108" y="172" text-anchor="middle" font-size="10" fill="#9A9AA2" font-family="Inter,sans-serif">Oct</text>
+            <text x="172" y="172" text-anchor="middle" font-size="10" fill="#9A9AA2" font-family="Inter,sans-serif">Nov</text>
+            <text x="236" y="172" text-anchor="middle" font-size="10" fill="#9A9AA2" font-family="Inter,sans-serif">Dec</text>
+            <text x="300" y="172" text-anchor="middle" font-size="10" fill="#9A9AA2" font-family="Inter,sans-serif">Jan</text>
+            <text x="364" y="172" text-anchor="middle" font-size="10" fill="#9A9AA2" font-family="Inter,sans-serif">Feb</text>
+          </svg>
+          <div class="pill-row">
+            <span class="pill">Last week</span>
+            <span class="pill">Last month</span>
+            <span class="pill on">Semester</span>
+            <span class="pill">All time</span>
+          </div>
+        </div>
+        <div class="stat-row">
+          <div class="stat">
+            <div class="k">Weakest unit</div>
+            <div class="v">Unit 4</div>
+            <div class="n">Cellular respiration · 46%</div>
+          </div>
+          <div class="stat">
+            <div class="k">Exam readiness</div>
+            <div class="v">83%</div>
+            <div class="n">Midterm 2 · 6 days out</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Getting started ─────────────────────────────────────────────── -->
+<div class="reveal section-divider">
+  <div class="inner" style="padding-top:80px;padding-bottom:80px;display:flex;flex-direction:column;align-items:center;">
+    <h2 class="section-title" style="text-align:center;font-size:40px;margin-bottom:56px;">Set up a class in under 3 minutes.</h2>
+    <div class="steps" id="stepList"></div>
+  </div>
+</div>
+
+<!-- ── Who it's for ────────────────────────────────────────────────── -->
+<div class="reveal section-divider">
+  <div class="inner" style="padding-top:88px;padding-bottom:88px;display:flex;justify-content:center;">
+    <div style="max-width:900px;display:flex;flex-direction:column;align-items:center;">
+      <h2 class="section-title" style="text-align:center;font-size:42px;">Built for anyone<br>carrying a real course load.</h2>
+      <p class="body" style="margin-top:16px;max-width:580px;font-size:17px;text-align:center;">
+        Pre-med grinding through orgo. An econ major with four problem sets due Thursday. A law student outlining for finals.
+        Anyone whose classes each have their own vocabulary, their own professor, and their own way of testing you.
+      </p>
+      <p class="body" style="margin-top:12px;max-width:580px;font-size:17px;text-align:center;">
+        Undergrad, grad school, professional programs, certifications — if it has a syllabus, Curve can learn it.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Final CTA ───────────────────────────────────────────────────── -->
+<div class="reveal section-divider">
+  <div class="inner" style="padding-top:80px;padding-bottom:80px;display:flex;flex-direction:column;align-items:center;">
+    <h2 class="display" style="font-size:46px;line-height:54px;text-align:center;letter-spacing:-1.6px;">
+      Stop studying blind.<br>Start studying your class.
+    </h2>
+    <p class="body" style="margin-top:16px;text-align:center;max-width:460px;font-size:18px;">
+      Upload a syllabus. Add your notes. Record your next lecture. Curve does the rest.
+    </p>
+    <div style="margin-top:36px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:center;">
+      <button class="cta-btn" onclick="goStart()">Get started free</button>
+      <button class="cta-ghost" onclick="document.querySelector('.showcase').scrollIntoView({behavior:'smooth',block:'center'})">See how it works</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Footer ──────────────────────────────────────────────────────── -->
+<footer>
+  <div class="inner foot-row">
+    <div class="foot-brand">
+      <div class="logo-mark">
+        <svg width="13" height="13" viewBox="0 0 20 20" fill="none">
+          <path d="M3 15.5C5.5 15.5 6.5 4.5 10 4.5C13.5 4.5 14.5 15.5 17 15.5" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span>Curve.ai</span>
+    </div>
+    <div class="foot-copy">© <span id="yr"></span> Curve.ai</div>
+  </div>
+</footer>
+
+<script>
+/* ── Nav scroll morph ─────────────────────────────────────────────── */
+const navOuter = document.getElementById('navOuter');
+window.addEventListener('scroll', () => {
+  navOuter.classList.toggle('scrolled', window.scrollY > 24);
+}, {passive:true});
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+function goStart(){
+  const v = document.getElementById('heroEmail').value.trim();
+  console.log('get started', v);
+}
+
+/* ── Typewriter placeholder ───────────────────────────────────────── */
+(function(){
+  const TEXT = 'Enter your school email';
+  const ghost = document.getElementById('heroGhost');
+  const ghostText = document.getElementById('ghostText');
+  const caret = document.getElementById('caret');
+  const input = document.getElementById('heroEmail');
+  let txt = '', phase = 'typing', t;
+  setInterval(() => caret.classList.toggle('off'), 530);
+  input.addEventListener('input', () => ghost.classList.toggle('hide', input.value !== ''));
+  function tick(){
+    if (input.value !== '') { t = setTimeout(tick, 400); return; }
+    if (phase === 'typing') {
+      if (txt.length < TEXT.length) { txt = TEXT.slice(0, txt.length + 1); t = setTimeout(tick, 75); }
+      else { phase = 'hold'; t = setTimeout(tick, 1800); }
+    } else if (phase === 'hold') { phase = 'deleting'; t = setTimeout(tick, 400); }
+    else if (phase === 'deleting') {
+      if (txt.length > 0) { txt = txt.slice(0, -1); t = setTimeout(tick, 38); }
+      else { phase = 'wait'; t = setTimeout(tick, 600); }
+    } else { phase = 'typing'; t = setTimeout(tick, 200); }
+    ghostText.textContent = txt;
+  }
+  tick();
+})();
+
+/* ── College logo marquee ─────────────────────────────────────────── */
+/* PLACEHOLDER wordmarks. Swap `mark` for each school's real logo (inline SVG
+   or <img>) once you have permission to display it. */
+(function(){
+  const SEAL = `<svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+    <path d="M13 2.2 22.2 6.4v6.1c0 5.3-3.7 9.6-9.2 11.3-5.5-1.7-9.2-6-9.2-11.3V6.4L13 2.2Z" stroke="#0A0A0A" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M8.8 11.6 13 9.4l4.2 2.2L13 13.9l-4.2-2.3Z" fill="#0A0A0A"/>
+    <path d="M16.4 12.4v3" stroke="#0A0A0A" stroke-width="1.4" stroke-linecap="round"/>
+  </svg>`;
+  const TORCH = `<svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+    <path d="M13 2.5c2.4 2.6 3.6 4.8 3.6 6.7 0 2.3-1.6 3.8-3.6 3.8s-3.6-1.5-3.6-3.8c0-1.9 1.2-4.1 3.6-6.7Z" stroke="#0A0A0A" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M10.4 14.5h5.2l-.9 9h-3.4l-.9-9Z" stroke="#0A0A0A" stroke-width="1.6" stroke-linejoin="round"/>
+  </svg>`;
+  const BOOK = `<svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+    <path d="M13 7.2c-2-1.6-4.3-2.3-7-2.3v13.4c2.7 0 5 .7 7 2.3 2-1.6 4.3-2.3 7-2.3V4.9c-2.7 0-5 .7-7 2.3Z" stroke="#0A0A0A" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M13 7.2v13.4" stroke="#0A0A0A" stroke-width="1.6"/>
+  </svg>`;
+  const COLUMN = `<svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+    <path d="M3.4 9.2 13 4l9.6 5.2H3.4Z" stroke="#0A0A0A" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M6.6 11.4v7.8M13 11.4v7.8M19.4 11.4v7.8" stroke="#0A0A0A" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M3.8 21.6h18.4" stroke="#0A0A0A" stroke-width="1.6" stroke-linecap="round"/>
+  </svg>`;
+  const LEAF = `<svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+    <path d="M20.8 5.2C12.6 4.4 6.6 8 6.6 14.2c0 2.4 1 4.4 2.4 5.6C13.4 15.4 16.6 10.4 20.8 5.2Z" stroke="#0A0A0A" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M5.6 22.2c1.6-3.4 3.8-6.4 6.4-9" stroke="#0A0A0A" stroke-width="1.6" stroke-linecap="round"/>
+  </svg>`;
+  const STAR = `<svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+    <path d="m13 3.4 2.9 6 6.6.9-4.8 4.6 1.2 6.5L13 18.3l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9 2.9-6Z" stroke="#0A0A0A" stroke-width="1.6" stroke-linejoin="round"/>
+  </svg>`;
+
+  const SCHOOLS = [
+    {mark:SEAL,   name:'Northgate University',  sub:'EST. 1871'},
+    {mark:TORCH,  name:'St. Claire College',    sub:'LUX ET VERITAS'},
+    {mark:COLUMN, name:'Ridgemont State',       sub:'UNIVERSITY'},
+    {mark:BOOK,   name:'Ashford Institute',     sub:'OF TECHNOLOGY'},
+    {mark:LEAF,   name:'Lakeview University',   sub:'EST. 1904'},
+    {mark:STAR,   name:'Fairmont A&M',          sub:'STATE UNIVERSITY'},
+    {mark:SEAL,   name:'Whitmore College',      sub:'EST. 1888'},
+    {mark:COLUMN, name:'Bellhaven University',  sub:'SCHOOL OF ARTS'},
+  ];
+
+  const item = s => `<div class="logo-item">${s.mark}<span class="lw"><b>${s.name}</b><i>${s.sub}</i></span></div>`;
+  // The track is one "half" rendered twice, and the animation travels exactly
+  // -50% — so the second copy lands where the first started and the loop is
+  // seamless. The half itself must be WIDER THAN THE VIEWPORT or gaps appear
+  // on wide screens, so repeat the school list until it clears the display.
+  const track = document.getElementById('logosTrack');
+  const one = SCHOOLS.map(item).join('');
+  function build(){
+    const target = Math.max(screen.width, window.innerWidth) * 1.35;
+    track.innerHTML = one;                       // measure a single set
+    const setW = track.scrollWidth || 1;
+    const reps = Math.max(2, Math.ceil(target / setW));
+    const half = one.repeat(reps);
+    track.innerHTML = half + half;
+    // Keep the scroll speed constant (~45 px/s) regardless of how many reps.
+    track.style.animationDuration = ((setW * reps) / 45).toFixed(1) + 's';
+  }
+  build();
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(build, 250); });
+})();
+
+/* ── Mock frame (browser chrome) ──────────────────────────────────── */
+function MockFrame(inner){
+  const cW = 600, bevel = 14, camRow = 10;
+  const iX = bevel, iY = bevel + camRow, iW = cW - bevel*2;
+  const W = 540, H = 400;
+  const iH = Math.round(iW * H / W);
+  const outerH = iY + iH + bevel;
+  const sx = iW / W, sy = iH / H;
+  return `
+  <svg viewBox="0 0 ${cW} ${outerH}" class="feature-fade">
+    <defs>
+      <clipPath id="scClip"><rect x="${iX}" y="${iY}" width="${iW}" height="${iH}" rx="6"/></clipPath>
+      <filter id="frameShadow" x="-4%" y="-4%" width="108%" height="112%">
+        <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.13"/>
+      </filter>
+    </defs>
+    <rect x="0" y="0" width="${cW}" height="${outerH}" rx="14" fill="#E5E5E8" filter="url(#frameShadow)"/>
+    <rect x="1" y="1" width="${cW-2}" height="${outerH-2}" rx="13" fill="none" stroke="#fff" stroke-width="1" stroke-opacity="0.55"/>
+    <circle cx="${cW/2}" cy="${bevel/2 + camRow/2}" r="3.5" fill="#B0B2B8"/>
+    <circle cx="${cW/2}" cy="${bevel/2 + camRow/2}" r="1.5" fill="#8D8F97"/>
+    <rect x="${iX}" y="${iY}" width="${iW}" height="${iH}" rx="6" fill="#FAFAFA"/>
+    <g clip-path="url(#scClip)">
+      <g transform="translate(${iX},${iY}) scale(${sx},${sy})">
+        <rect width="${W}" height="${H}" fill="#FAFAFA"/>
+        <rect width="${W}" height="36" fill="#F1F1F3"/>
+        <circle cx="14" cy="18" r="5" fill="#FC5F5A"/>
+        <circle cx="28" cy="18" r="5" fill="#FDBC40"/>
+        <circle cx="42" cy="18" r="5" fill="#34C759"/>
+        <rect x="60" y="8" width="200" height="20" rx="6" fill="#E4E4E7"/>
+        <text x="70" y="22" font-size="10" fill="#9A9AA2" font-family="Inter,sans-serif">curve.ai/workspace</text>
+        <line x1="0" y1="36" x2="${W}" y2="36" stroke="#E4E4E7" stroke-width="1"/>
+        ${inner}
+      </g>
+    </g>
+  </svg>`;
+}
+const F = 'Inter,sans-serif';
+
+/* ── Feature mocks ────────────────────────────────────────────────── */
+function mockWorkspaces(){
+  const classes = [
+    {code:'BIOL 240', name:'Cell Biology', units:'8 units · 214 pages', pct:83},
+    {code:'ECON 301', name:'Microeconomics', units:'6 units · 178 pages', pct:71},
+    {code:'CHEM 210', name:'Organic Chemistry I', units:'9 units · 302 pages', pct:46},
+    {code:'PHIL 150', name:'Logic & Reasoning', units:'5 units · 96 pages', pct:92},
+  ];
+  let s = `<text x="20" y="62" font-size="14" font-weight="bold" fill="#0A0A0A" font-family="${F}">Your Classes · Spring 2026</text>
+  <rect x="418" y="48" width="102" height="24" rx="6" fill="#0A0A0A"/>
+  <text x="469" y="64" text-anchor="middle" font-size="11" fill="#fff" font-family="${F}">+ New Class</text>`;
+  classes.forEach((c,i) => {
+    const col = i % 2, row = Math.floor(i/2);
+    const x = 20 + col*256, y = 84 + row*118;
+    s += `
+    <rect x="${x}" y="${y}" width="244" height="104" rx="12" fill="#fff" stroke="#E4E4E7" stroke-width="1"/>
+    <rect x="${x}" y="${y}" width="4" height="104" rx="2" fill="#0A0A0A"/>
+    <rect x="${x+16}" y="${y+16}" width="72" height="20" rx="6" fill="#F4F4F5"/>
+    <text x="${x+52}" y="${y+30}" text-anchor="middle" font-size="10" font-weight="bold" fill="#0A0A0A" font-family="${F}">${c.code}</text>
+    <text x="${x+16}" y="${y+56}" font-size="13" font-weight="bold" fill="#0A0A0A" font-family="${F}">${c.name}</text>
+    <text x="${x+16}" y="${y+72}" font-size="10" fill="#9A9AA2" font-family="${F}">${c.units}</text>
+    <rect x="${x+16}" y="${y+82}" width="180" height="6" rx="3" fill="#F1F1F3"/>
+    <rect x="${x+16}" y="${y+82}" width="${Math.round(180*c.pct/100)}" height="6" rx="3" fill="#0A0A0A"/>
+    <text x="${x+228}" y="${y+88}" text-anchor="end" font-size="11" font-weight="bold" fill="#0A0A0A" font-family="${F}">${c.pct}%</text>`;
+  });
+  s += `<rect x="20" y="326" width="500" height="54" rx="12" fill="#F4F4F5" stroke="#E4E4E7" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="270" y="350" text-anchor="middle" font-size="12" fill="#4B4B52" font-family="${F}">Drop a syllabus, slide deck, or PDF to build a new workspace</text>
+  <text x="270" y="368" text-anchor="middle" font-size="10" fill="#9A9AA2" font-family="${F}">PDF · DOCX · PPTX · images · audio</text>`;
+  return s;
+}
+
+function mockNotetaker(){
+  let bars = '';
+  for (let i = 0; i < 46; i++) {
+    const h = 6 + Math.abs(Math.sin(i * 0.9)) * 34 + (i % 3) * 4;
+    bars += `<rect x="${36 + i*9}" y="${128 - h/2}" width="4" height="${h}" rx="2" fill="${i < 30 ? '#0A0A0A' : '#D4D4D8'}"/>`;
+  }
+  return `
+  <text x="20" y="62" font-size="14" font-weight="bold" fill="#0A0A0A" font-family="${F}">AI Lecture Notetaker</text>
+  <rect x="404" y="48" width="116" height="24" rx="12" fill="#FEE2E2"/>
+  <circle cx="420" cy="60" r="4" fill="#EF4444"/>
+  <text x="470" y="64" text-anchor="middle" font-size="11" font-weight="bold" fill="#EF4444" font-family="${F}">REC 32:14</text>
+  <rect x="20" y="80" width="500" height="96" rx="12" fill="#fff" stroke="#E4E4E7" stroke-width="1"/>
+  ${bars}
+  <text x="20" y="200" font-size="10" fill="#9A9AA2" font-family="${F}" letter-spacing="1">LIVE TRANSCRIPT</text>
+  <rect x="20" y="210" width="500" height="96" rx="12" fill="#fff" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="36" y="232" font-size="11" fill="#4B4B52" font-family="${F}">…so the electron transport chain is where the bulk of the ATP</text>
+  <text x="36" y="250" font-size="11" fill="#4B4B52" font-family="${F}">actually gets produced — and this is the part that shows up on</text>
+  <text x="36" y="268" font-size="11" fill="#4B4B52" font-family="${F}">the exam almost every single year, so write this down…</text>
+  <rect x="36" y="280" width="128" height="18" rx="9" fill="#F4F4F5"/>
+  <text x="100" y="293" text-anchor="middle" font-size="9" fill="#4B4B52" font-family="${F}">★ flagged as exam-likely</text>
+  <text x="20" y="330" font-size="10" fill="#9A9AA2" font-family="${F}" letter-spacing="1">ASSIGN TO CLASS</text>
+  <rect x="20" y="340" width="120" height="30" rx="15" fill="#0A0A0A"/>
+  <text x="80" y="359" text-anchor="middle" font-size="11" fill="#fff" font-family="${F}">BIOL 240 ✓</text>
+  <rect x="150" y="340" width="120" height="30" rx="15" fill="#F4F4F5" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="210" y="359" text-anchor="middle" font-size="11" fill="#4B4B52" font-family="${F}">ECON 301</text>
+  <rect x="280" y="340" width="120" height="30" rx="15" fill="#F4F4F5" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="340" y="359" text-anchor="middle" font-size="11" fill="#4B4B52" font-family="${F}">CHEM 210</text>
+  <rect x="410" y="340" width="110" height="30" rx="15" fill="#F4F4F5" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="465" y="359" text-anchor="middle" font-size="11" fill="#4B4B52" font-family="${F}">Unassigned</text>`;
+}
+
+function mockMasterNotes(){
+  const units = [
+    {n:'Unit 1', t:'Cell Structure & Organelles', src:'Syllabus wk 1–2 · 3 lectures · Ch. 4', done:true},
+    {n:'Unit 2', t:'Membrane Transport', src:'Syllabus wk 3–4 · 2 lectures · Ch. 5', done:true},
+    {n:'Unit 3', t:'Enzymes & Metabolism', src:'Syllabus wk 5–6 · 3 lectures · Ch. 6', done:true},
+    {n:'Unit 4', t:'Cellular Respiration', src:'Syllabus wk 7–8 · 2 lectures · Ch. 7', done:false},
+  ];
+  let s = `<text x="20" y="62" font-size="14" font-weight="bold" fill="#0A0A0A" font-family="${F}">Master Notes · BIOL 240</text>
+  <rect x="392" y="48" width="128" height="24" rx="6" fill="#F4F4F5" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="456" y="64" text-anchor="middle" font-size="11" fill="#4B4B52" font-family="${F}">Built from syllabus</text>`;
+  units.forEach((u,i) => {
+    const y = 82 + i*58;
+    s += `
+    <rect x="20" y="${y}" width="230" height="48" rx="10" fill="#fff" stroke="${i===3?'#0A0A0A':'#E4E4E7'}" stroke-width="${i===3?'1.5':'1'}"/>
+    <text x="36" y="${y+19}" font-size="10" fill="#9A9AA2" font-family="${F}">${u.n}</text>
+    <text x="36" y="${y+34}" font-size="12" font-weight="bold" fill="#0A0A0A" font-family="${F}">${u.t}</text>
+    <text x="234" y="${y+29}" text-anchor="end" font-size="12" fill="${u.done?'#0A0A0A':'#9A9AA2'}" font-family="${F}">${u.done?'✓':'○'}</text>`;
+  });
+  s += `
+  <rect x="266" y="82" width="254" height="290" rx="12" fill="#fff" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="284" y="106" font-size="12" font-weight="bold" fill="#0A0A0A" font-family="${F}">Unit 4 — Cellular Respiration</text>
+  <line x1="284" y1="116" x2="502" y2="116" stroke="#EFEFF1" stroke-width="1"/>
+  <text x="284" y="136" font-size="10" fill="#9A9AA2" font-family="${F}" letter-spacing="1">KEY OBJECTIVES</text>
+  <text x="284" y="154" font-size="10" fill="#4B4B52" font-family="${F}">— Trace glucose through glycolysis → Krebs</text>
+  <text x="284" y="170" font-size="10" fill="#4B4B52" font-family="${F}">— Explain the proton gradient &amp; ATP synthase</text>
+  <text x="284" y="186" font-size="10" fill="#4B4B52" font-family="${F}">— Compare aerobic vs. anaerobic yield</text>
+  <text x="284" y="210" font-size="10" fill="#9A9AA2" font-family="${F}" letter-spacing="1">SUMMARY</text>
+  <rect x="284" y="218" width="218" height="7" rx="3.5" fill="#F1F1F3"/>
+  <rect x="284" y="231" width="204" height="7" rx="3.5" fill="#F1F1F3"/>
+  <rect x="284" y="244" width="212" height="7" rx="3.5" fill="#F1F1F3"/>
+  <rect x="284" y="257" width="150" height="7" rx="3.5" fill="#F1F1F3"/>
+  <rect x="284" y="278" width="218" height="40" rx="8" fill="#F4F4F5" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="296" y="296" font-size="9" fill="#9A9AA2" font-family="${F}">SOURCES</text>
+  <text x="296" y="310" font-size="10" fill="#4B4B52" font-family="${F}">Lecture 11 · Slides 22–38 · Ch. 7 pp. 189–204</text>
+  <rect x="284" y="330" width="104" height="26" rx="13" fill="#0A0A0A"/>
+  <text x="336" y="347" text-anchor="middle" font-size="11" fill="#fff" font-family="${F}">Make flashcards</text>
+  <rect x="396" y="330" width="106" height="26" rx="13" fill="#fff" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="449" y="347" text-anchor="middle" font-size="11" fill="#4B4B52" font-family="${F}">Quiz me on this</text>`;
+  return s;
+}
+
+function mockFlashcards(){
+  return `
+  <text x="20" y="62" font-size="14" font-weight="bold" fill="#0A0A0A" font-family="${F}">Flashcards · Unit 4</text>
+  <rect x="392" y="48" width="128" height="24" rx="12" fill="#F4F4F5" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="456" y="64" text-anchor="middle" font-size="11" fill="#4B4B52" font-family="${F}">14 of 62 · spaced</text>
+  <rect x="112" y="86" width="316" height="176" rx="16" fill="#fff" stroke="#E4E4E7" stroke-width="1"/>
+  <rect x="106" y="92" width="316" height="176" rx="16" fill="#fff" stroke="#E4E4E7" stroke-width="1"/>
+  <rect x="100" y="98" width="316" height="176" rx="16" fill="#fff" stroke="#0A0A0A" stroke-width="1.5"/>
+  <text x="120" y="124" font-size="9" fill="#9A9AA2" font-family="${F}" letter-spacing="1">FROM LECTURE 11 · SLIDE 27</text>
+  <text x="258" y="168" text-anchor="middle" font-size="16" font-weight="bold" fill="#0A0A0A" font-family="${F}">Where is the proton gradient</text>
+  <text x="258" y="190" text-anchor="middle" font-size="16" font-weight="bold" fill="#0A0A0A" font-family="${F}">established, and what uses it?</text>
+  <rect x="196" y="220" width="124" height="30" rx="15" fill="#F4F4F5"/>
+  <text x="258" y="239" text-anchor="middle" font-size="11" fill="#4B4B52" font-family="${F}">Tap to reveal answer</text>
+  <rect x="100" y="290" width="98" height="38" rx="10" fill="#fff" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="149" y="308" text-anchor="middle" font-size="11" font-weight="bold" fill="#EF4444" font-family="${F}">Again</text>
+  <text x="149" y="321" text-anchor="middle" font-size="9" fill="#9A9AA2" font-family="${F}">&lt;1 min</text>
+  <rect x="206" y="290" width="98" height="38" rx="10" fill="#fff" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="255" y="308" text-anchor="middle" font-size="11" font-weight="bold" fill="#F97316" font-family="${F}">Hard</text>
+  <text x="255" y="321" text-anchor="middle" font-size="9" fill="#9A9AA2" font-family="${F}">10 min</text>
+  <rect x="312" y="290" width="98" height="38" rx="10" fill="#0A0A0A"/>
+  <text x="361" y="308" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff" font-family="${F}">Good</text>
+  <text x="361" y="321" text-anchor="middle" font-size="9" fill="#A1A1AA" font-family="${F}">2 days</text>
+  <rect x="418" y="290" width="98" height="38" rx="10" fill="#fff" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="467" y="308" text-anchor="middle" font-size="11" font-weight="bold" fill="#10B981" font-family="${F}">Easy</text>
+  <text x="467" y="321" text-anchor="middle" font-size="9" fill="#9A9AA2" font-family="${F}">6 days</text>
+  <rect x="100" y="346" width="416" height="6" rx="3" fill="#F1F1F3"/>
+  <rect x="100" y="346" width="94" height="6" rx="3" fill="#0A0A0A"/>
+  <text x="100" y="372" font-size="10" fill="#9A9AA2" font-family="${F}">Deck generated from your Unit 4 master notes · 48 cards remaining today</text>`;
+}
+
+function mockExam(){
+  return `
+  <text x="20" y="62" font-size="14" font-weight="bold" fill="#0A0A0A" font-family="${F}">Practice Exam · Midterm 2</text>
+  <rect x="382" y="48" width="138" height="24" rx="6" fill="#F4F4F5" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="451" y="64" text-anchor="middle" font-size="11" fill="#4B4B52" font-family="${F}">Q 7 of 25 · 41:02 left</text>
+  <rect x="20" y="80" width="500" height="6" rx="3" fill="#F1F1F3"/>
+  <rect x="20" y="80" width="140" height="6" rx="3" fill="#0A0A0A"/>
+  <rect x="20" y="98" width="500" height="66" rx="12" fill="#fff" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="36" y="120" font-size="9" fill="#9A9AA2" font-family="${F}" letter-spacing="1">MULTIPLE CHOICE · UNIT 4 · MATCHED TO PROF. HALE'S 2024 EXAM</text>
+  <text x="36" y="142" font-size="12" font-weight="bold" fill="#0A0A0A" font-family="${F}">A cell is treated with a chemical that makes the inner mitochondrial</text>
+  <text x="36" y="157" font-size="12" font-weight="bold" fill="#0A0A0A" font-family="${F}">membrane freely permeable to protons. What happens to ATP output?</text>
+  ${[
+    {t:'A.  ATP production increases sharply', sel:false},
+    {t:'B.  ATP production collapses; heat is released instead', sel:true},
+    {t:'C.  Glycolysis halts immediately', sel:false},
+    {t:'D.  The Krebs cycle runs in reverse', sel:false},
+  ].map((o,i) => `
+  <rect x="20" y="${176 + i*44}" width="500" height="36" rx="10" fill="${o.sel?'#0A0A0A':'#fff'}" stroke="${o.sel?'#0A0A0A':'#E4E4E7'}" stroke-width="1"/>
+  <text x="40" y="${199 + i*44}" font-size="12" fill="${o.sel?'#fff':'#4B4B52'}" font-family="${F}">${o.t}</text>`).join('')}
+  <rect x="20" y="356" width="240" height="28" rx="8" fill="#F4F4F5" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="140" y="374" text-anchor="middle" font-size="11" fill="#4B4B52" font-family="${F}">Flag for review</text>
+  <rect x="280" y="356" width="240" height="28" rx="8" fill="#0A0A0A"/>
+  <text x="400" y="374" text-anchor="middle" font-size="11" fill="#fff" font-family="${F}">Next question →</text>`;
+}
+
+function mockAsk(){
+  return `
+  <text x="20" y="62" font-size="14" font-weight="bold" fill="#0A0A0A" font-family="${F}">Ask BIOL 240</text>
+  <rect x="368" y="48" width="152" height="24" rx="12" fill="#F4F4F5" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="444" y="64" text-anchor="middle" font-size="11" fill="#4B4B52" font-family="${F}">Answers only from your class</text>
+  <rect x="216" y="84" width="304" height="38" rx="12" fill="#0A0A0A"/>
+  <text x="504" y="107" text-anchor="end" font-size="12" fill="#fff" font-family="${F}">Why did Hale spend so long on chemiosmosis?</text>
+  <rect x="20" y="134" width="440" height="128" rx="12" fill="#fff" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="36" y="158" font-size="11" fill="#4B4B52" font-family="${F}">Because it's been on every midterm 2 he's given. In Lecture 11 he</text>
+  <text x="36" y="176" font-size="11" fill="#4B4B52" font-family="${F}">said "this is the part that shows up on the exam almost every</text>
+  <text x="36" y="194" font-size="11" fill="#4B4B52" font-family="${F}">single year," and the syllabus lists it as a core objective for</text>
+  <text x="36" y="212" font-size="11" fill="#4B4B52" font-family="${F}">Unit 4. Two of the three past exams you uploaded test it directly.</text>
+  <line x1="36" y1="226" x2="444" y2="226" stroke="#EFEFF1" stroke-width="1"/>
+  <text x="36" y="244" font-size="9" fill="#9A9AA2" font-family="${F}" letter-spacing="1">SOURCES</text>
+  ${['Lecture 11 · 24:18','Syllabus p. 3','Midterm 2 (2024) Q14'].map((c,i)=>`
+  <rect x="${36 + i*132}" y="250" width="${i===2?126:112}" height="20" rx="10" fill="#F4F4F5" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="${36 + i*132 + (i===2?63:56)}" y="264" text-anchor="middle" font-size="9" fill="#4B4B52" font-family="${F}">${c}</text>`).join('')}
+  <rect x="20" y="286" width="500" height="40" rx="12" fill="#fff" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="38" y="311" font-size="12" fill="#9A9AA2" font-family="${F}">Ask anything about this class…</text>
+  <rect x="466" y="294" width="42" height="24" rx="8" fill="#0A0A0A"/>
+  <text x="487" y="311" text-anchor="middle" font-size="11" fill="#fff" font-family="${F}">↑</text>
+  <text x="20" y="352" font-size="10" fill="#9A9AA2" font-family="${F}" letter-spacing="1">SUGGESTED</text>
+  ${['Make me a Unit 4 cheat sheet','What did I miss in Lecture 9?','Quiz me on enzymes'].map((c,i)=>`
+  <rect x="${20 + i*172}" y="360" width="164" height="24" rx="12" fill="#F4F4F5" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="${102 + i*172}" y="376" text-anchor="middle" font-size="10" fill="#4B4B52" font-family="${F}">${c}</text>`).join('')}`;
+}
+
+function mockWeakSpots(){
+  const units = [
+    {n:'Unit 1 — Cell Structure',   pct:91, c:'#10B981'},
+    {n:'Unit 2 — Membrane Transport',pct:78, c:'#10B981'},
+    {n:'Unit 3 — Enzymes',          pct:64, c:'#F97316'},
+    {n:'Unit 4 — Cellular Respiration',pct:46, c:'#EF4444'},
+  ];
+  let s = `<text x="20" y="62" font-size="14" font-weight="bold" fill="#0A0A0A" font-family="${F}">Weak Spots · BIOL 240</text>
+  <rect x="378" y="48" width="142" height="24" rx="12" fill="#FEE2E2"/>
+  <text x="449" y="64" text-anchor="middle" font-size="11" font-weight="bold" fill="#EF4444" font-family="${F}">1 UNIT AT RISK</text>`;
+  units.forEach((u,i) => {
+    const y = 84 + i*66, w = Math.round(340 * u.pct/100);
+    s += `
+    <rect x="20" y="${y}" width="500" height="54" rx="10" fill="#fff" stroke="#E4E4E7" stroke-width="1"/>
+    <rect x="20" y="${y}" width="4" height="54" rx="2" fill="${u.c}"/>
+    <text x="36" y="${y+21}" font-size="12" font-weight="bold" fill="#0A0A0A" font-family="${F}">${u.n}</text>
+    <rect x="36" y="${y+30}" width="340" height="10" rx="5" fill="#F1F1F3"/>
+    <rect x="36" y="${y+30}" width="${w}" height="10" rx="5" fill="${u.c}"/>
+    <text x="${36+w+8}" y="${y+39}" font-size="11" font-weight="bold" fill="${u.c}" font-family="${F}">${u.pct}%</text>
+    <text x="504" y="${y+25}" text-anchor="end" font-size="10" fill="#9A9AA2" font-family="${F}">${u.pct < 65 ? 'Review now →' : 'On track'}</text>`;
+  });
+  s += `<rect x="20" y="350" width="500" height="34" rx="10" fill="#0A0A0A"/>
+  <text x="270" y="371" text-anchor="middle" font-size="12" fill="#fff" font-family="${F}">Build a 45-min session targeting Unit 4 &amp; Unit 3 →</text>`;
+  return s;
+}
+
+function mockPlan(){
+  const days = [
+    {d:'MON', t:'Unit 4 flashcards', m:'25 min', on:true},
+    {d:'TUE', t:'Practice exam · Units 3–4', m:'50 min', on:true},
+    {d:'WED', t:'Review missed questions', m:'20 min', on:false},
+    {d:'THU', t:'Unit 3 enzymes recall', m:'30 min', on:false},
+    {d:'FRI', t:'Full mock midterm', m:'75 min', on:false},
+  ];
+  let s = `<text x="20" y="62" font-size="14" font-weight="bold" fill="#0A0A0A" font-family="${F}">Study Plan · Midterm 2 in 6 days</text>
+  <rect x="396" y="48" width="124" height="24" rx="6" fill="#F4F4F5" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="458" y="64" text-anchor="middle" font-size="11" fill="#4B4B52" font-family="${F}">Auto-scheduled</text>`;
+  days.forEach((x,i) => {
+    const y = 82 + i*54;
+    s += `
+    <rect x="20" y="${y}" width="500" height="44" rx="10" fill="#fff" stroke="#E4E4E7" stroke-width="1"/>
+    <rect x="20" y="${y}" width="4" height="44" rx="2" fill="${x.on?'#0A0A0A':'#D4D4D8'}"/>
+    <rect x="36" y="${y+11}" width="42" height="22" rx="6" fill="#F4F4F5"/>
+    <text x="57" y="${y+26}" text-anchor="middle" font-size="10" font-weight="bold" fill="#0A0A0A" font-family="${F}">${x.d}</text>
+    <text x="92" y="${y+27}" font-size="12" font-weight="bold" fill="#0A0A0A" font-family="${F}">${x.t}</text>
+    <text x="446" y="${y+27}" text-anchor="end" font-size="11" fill="#9A9AA2" font-family="${F}">${x.m}</text>
+    <text x="504" y="${y+27}" text-anchor="end" font-size="12" fill="${x.on?'#10B981':'#D4D4D8'}" font-family="${F}">${x.on?'✓':'○'}</text>`;
+  });
+  s += `
+  <rect x="20" y="356" width="500" height="30" rx="10" fill="#F4F4F5" stroke="#E4E4E7" stroke-width="1"/>
+  <text x="270" y="375" text-anchor="middle" font-size="11" fill="#4B4B52" font-family="${F}">Rebuilt every night from your quiz results and what's coming up on the syllabus</text>`;
+  return s;
+}
+
+const FEATURES = [
+  {t:'Class Workspaces',        b:'Each class gets its own workspace with its own AI. Feed it the syllabus, slide decks, notes, and past exams — it only ever answers from that class.', m:mockWorkspaces},
+  {t:'AI Lecture Notetaker',    b:'Hit record from the home screen. Curve transcribes the lecture live, flags what your professor emphasizes, and lets you assign it to a class in one tap.', m:mockNotetaker},
+  {t:'Master Notes by Unit',    b:'Curve reads your syllabus, breaks the course into units, and builds one clean master note per unit — merged from every lecture, slide, and reading you gave it.', m:mockMasterNotes},
+  {t:'Flashcards',              b:'Generate a deck from any unit or note in one click, then review it on a spaced-repetition schedule that adapts to what you keep forgetting.', m:mockFlashcards},
+  {t:'Practice Exams',          b:'Curve studies your past exams and quizzes to match your professor’s style, then writes new practice tests in that format — timed, graded, and explained.', m:mockExam},
+  {t:'Ask Your Class',          b:'Ask anything and get an answer grounded in your own materials, with a citation back to the exact lecture timestamp, slide, or page it came from.', m:mockAsk},
+  {t:'Weak Spot Tracker',       b:'Every question you answer updates a mastery score per unit, so you can see which topic is going to sink you before the exam does.', m:mockWeakSpots},
+  {t:'Study Plan',              b:'Curve turns your exam dates and weak spots into a day-by-day plan, and rebuilds it every night based on how you actually performed.', m:mockPlan},
+];
+
+const menu = document.getElementById('featureMenu');
+const stage = document.getElementById('featureStage');
+const caption = document.getElementById('featureCaption');
+let sel = 0;
+FEATURES.forEach((f,i) => {
+  const b = document.createElement('button');
+  b.className = 'feature-btn' + (i === 0 ? ' active' : '');
+  b.innerHTML = `<span>${f.t}</span><span class="arrow">→</span>`;
+  b.addEventListener('mouseenter', () => setFeature(i));
+  b.addEventListener('click', () => setFeature(i));
+  menu.appendChild(b);
+});
+function setFeature(i){
+  if (i === sel) return;
+  sel = i;
+  [...menu.children].forEach((el,j) => el.classList.toggle('active', j === i));
+  render();
+}
+function render(){
+  stage.innerHTML = MockFrame(FEATURES[sel].m());
+  caption.textContent = FEATURES[sel].b;
+}
+render();
+
+/* ── Pillars ──────────────────────────────────────────────────────── */
+const PILLARS = [
+  {n:'01', t:'It knows your syllabus', b:'Curve reads the course outline first, so units, objectives, and exam dates come from your class — not from a generic template of what "biology" usually covers.'},
+  {n:'02', t:'It hears every lecture',  b:'Record from the home screen and assign it to a class. The transcript folds straight into that unit’s master notes, so nothing lives in a separate app you never reopen.'},
+  {n:'03', t:'It cites its sources',    b:'Every answer, flashcard, and practice question points back to a lecture timestamp, slide number, or page. If you don’t trust it, you can check it in one click.'},
+];
+const pillarRow = document.getElementById('pillarRow');
+PILLARS.forEach((p,i) => {
+  const d = document.createElement('div');
+  d.className = 'pillar';
+  d.style.transitionDelay = `${i*150}ms, ${i*150}ms, 0ms, 0ms`;
+  d.innerHTML = `<div class="pillar-n">${p.n}</div><div class="pillar-t">${p.t}</div><div class="pillar-b">${p.b}</div>`;
+  pillarRow.appendChild(d);
+});
+
+/* ── Checklist ────────────────────────────────────────────────────── */
+[
+  'Mastery tracked per unit, not per class',
+  'Every quiz and flashcard feeds the same score',
+  'Exam readiness projected against your real exam date',
+  'Weakest unit surfaced on the home screen',
+  'Selectable baselines: week, month, semester, all time',
+].forEach(t => {
+  const d = document.createElement('div');
+  d.className = 'check-row';
+  d.innerHTML = `<div class="check-rule"></div><span>${t}</span>`;
+  document.getElementById('checkList').appendChild(d);
+});
+
+/* ── Steps ────────────────────────────────────────────────────────── */
+[
+  {n:'1', t:'Create a workspace for the class', b:'Name it, then drop in the syllabus. Curve reads it immediately and lays out the unit structure, key objectives, and every exam date it can find.', cta:'Create your first class →'},
+  {n:'2', t:'Feed it everything you have',      b:'Slide decks, lecture PDFs, your own notes, old quizzes, past exams, textbook chapters. The more you give it, the more it sounds like your actual course.'},
+  {n:'3', t:'Record your next lecture',          b:'Open Curve, hit record, and put your phone down. It transcribes live, flags what the professor emphasizes, and files it under the right unit when class ends.'},
+  {n:'4', t:'Study what you actually need',      b:'Flashcards, practice exams, and a day-by-day plan — all built from your class and aimed at whichever unit your mastery score says is weakest.'},
+].forEach(s => {
+  const d = document.createElement('div');
+  d.className = 'step';
+  d.innerHTML = `<div class="step-badge">${s.n}</div><div style="flex:1;">
+    <div class="step-title">${s.t}</div>
+    <div class="step-body">${s.b}</div>
+    ${s.cta ? `<button class="step-cta" onclick="goStart()">${s.cta}</button>` : ''}
+  </div>`;
+  document.getElementById('stepList').appendChild(d);
+});
+
+/* ── Reveal on scroll ─────────────────────────────────────────────── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, {threshold:0.15});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+const pio = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      [...e.target.children].forEach(c => c.classList.add('in'));
+      pio.unobserve(e.target);
+    }
+  });
+}, {threshold:0.2});
+pio.observe(pillarRow);
+setTimeout(() => {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  [...pillarRow.children].forEach(c => c.classList.add('in'));
+}, 3500);
+</script>
+</body>
+</html>
