@@ -32,6 +32,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
+/* Keep anchor targets clear of the sticky nav */
+#features,#integrity,#pricing,#faq{scroll-margin-top:88px;}
 body{
   font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
   color:var(--text);
@@ -49,17 +51,15 @@ body{
 .section-sub{font-family:'Inter',sans-serif;font-size:18px;line-height:29px;color:var(--sub);}
 .accent{color:var(--grey);}
 .sec{padding:104px 0;}
-.eyebrow{
-  font-family:'Inter',sans-serif;font-weight:600;font-size:12px;letter-spacing:1.6px;
-  color:var(--blue);text-transform:uppercase;margin-bottom:16px;
-}
 
 /* ── Nav (sticky, morphs to glass pill) ───────────────────────────── */
 .nav-outer{position:sticky;top:0;z-index:100;padding-top:0;background:transparent;transition:padding-top .5s cubic-bezier(.22,1,.36,1);}
 .nav-outer.scrolled{padding-top:12px;}
 .nav-pill{
   display:flex;align-items:center;justify-content:space-between;position:relative;
-  width:calc(100% - 96px);margin:0 auto;
+  /* Narrow at rest so the pill has only a short distance left to travel
+     when it forms on scroll (rest 1240px cap vs scrolled 1160px). */
+  width:calc(100% - 40px);max-width:1240px;margin:0 auto;
   border-radius:0;padding:18px 0;
   background:rgba(255,255,255,0);border:1px solid rgba(255,255,255,0);
   box-shadow:0 0 0 rgba(0,0,0,0);
@@ -77,6 +77,15 @@ body{
 .nav-logo{display:flex;align-items:center;gap:10px;}
 .logo-mark{width:30px;height:30px;object-fit:contain;flex-shrink:0;display:block;}
 .logo-text{font-family:'Inter',sans-serif;font-weight:600;font-size:16px;color:var(--text);letter-spacing:-.2px;}
+.nav-links{
+  position:absolute;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:30px;
+}
+.nav-links a{
+  font-family:'Inter',sans-serif;font-weight:500;font-size:14px;color:var(--grey);
+  text-decoration:none;transition:color .2s ease;white-space:nowrap;
+}
+.nav-links a:hover{color:var(--text);}
 .nav-right{display:flex;align-items:center;gap:20px;}
 .nav-signin{
   background:none;border:none;cursor:pointer;padding:0;
@@ -305,6 +314,7 @@ footer{border-top:1px solid var(--border);padding:64px 0 36px;margin-top:20px;}
   .section-title{font-size:30px;line-height:38px;letter-spacing:-.8px;}
   .section-sub{font-size:16px;line-height:26px;}
   .nav-pill{width:calc(100% - 40px);padding:14px 0;}
+  .nav-links{display:none;} /* no room beside the CTAs on narrow screens */
   .nav-outer.scrolled .nav-pill{width:calc(100% - 24px);margin:0 auto;padding:10px 16px;}
   .compare{grid-template-columns:1fr;gap:16px;}
   .feat{grid-template-columns:1fr;gap:32px;padding:48px 0;}
@@ -330,6 +340,12 @@ footer{border-top:1px solid var(--border);padding:64px 0 36px;margin-top:20px;}
       <img class="logo-mark" src="assets/logo.png" alt="Curve.ai" />
       <span class="logo-text">Curve.ai</span>
     </div>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#integrity">Integrity</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
     <div class="nav-right">
       <button class="nav-signin" onclick="goSignIn()">Sign In</button>
       <button class="nav-btn" onclick="goStart()">Get Started Free</button>
@@ -372,7 +388,6 @@ footer{border-top:1px solid var(--border);padding:64px 0 36px;margin-top:20px;}
 <div class="reveal section-divider">
   <div class="inner sec">
     <div style="text-align:center;max-width:760px;margin:0 auto 52px;">
-      <div class="eyebrow">See it work</div>
       <h2 class="section-title">Drop in a syllabus. Get a semester.</h2>
       <p class="section-sub" style="margin-top:18px;">
         Curve reads the course outline, builds the unit structure, and starts pulling every lecture,
@@ -395,7 +410,6 @@ footer{border-top:1px solid var(--border);padding:64px 0 36px;margin-top:20px;}
 <div class="reveal section-divider">
   <div class="inner-mid sec">
     <div style="text-align:center;max-width:720px;margin:0 auto;">
-      <div class="eyebrow">The difference</div>
       <h2 class="section-title">You've already tried asking ChatGPT.</h2>
       <p class="section-sub" style="margin-top:18px;">
         It gave you a textbook answer. It didn't know your professor spent three lectures on chemiosmosis,
@@ -416,10 +430,9 @@ footer{border-top:1px solid var(--border);padding:64px 0 36px;margin-top:20px;}
 </div>
 
 <!-- ── 3. Feature blocks ───────────────────────────────────────────── -->
-<div class="section-divider">
+<div class="section-divider" id="features">
   <div class="inner sec" style="padding-top:80px;padding-bottom:40px;">
     <div style="text-align:center;max-width:720px;margin:0 auto;">
-      <div class="eyebrow">What you get</div>
       <h2 class="section-title">Four things a general chatbot can't do.</h2>
     </div>
   </div>
@@ -430,7 +443,6 @@ footer{border-top:1px solid var(--border);padding:64px 0 36px;margin-top:20px;}
 <div class="reveal section-divider">
   <div class="inner sec">
     <div style="text-align:center;max-width:720px;margin:0 auto;">
-      <div class="eyebrow">Students</div>
       <h2 class="section-title">What it's like mid-semester.</h2>
     </div>
     <div class="tst-grid" id="tstGrid"></div>
@@ -438,10 +450,9 @@ footer{border-top:1px solid var(--border);padding:64px 0 36px;margin-top:20px;}
 </div>
 
 <!-- ── 5. Trust: integrity + privacy ───────────────────────────────── -->
-<div class="reveal section-divider">
+<div class="reveal section-divider" id="integrity">
   <div class="inner-mid sec">
     <div style="text-align:center;max-width:720px;margin:0 auto;">
-      <div class="eyebrow">Where we stand</div>
       <h2 class="section-title">Built to help you learn it — not skip it.</h2>
       <p class="section-sub" style="margin-top:18px;">
         Study tools have a bad reputation for good reasons. Here's the line Curve draws, and what
@@ -456,7 +467,6 @@ footer{border-top:1px solid var(--border);padding:64px 0 36px;margin-top:20px;}
 <div class="reveal section-divider">
   <div class="inner sec">
     <div style="text-align:center;max-width:720px;margin:0 auto;">
-      <div class="eyebrow">Getting started</div>
       <h2 class="section-title">Set up a class in under three minutes.</h2>
     </div>
     <div class="steps" id="stepGrid"></div>
@@ -464,10 +474,9 @@ footer{border-top:1px solid var(--border);padding:64px 0 36px;margin-top:20px;}
 </div>
 
 <!-- ── 7. Pricing ──────────────────────────────────────────────────── -->
-<div class="reveal section-divider">
+<div class="reveal section-divider" id="pricing">
   <div class="inner sec">
     <div style="text-align:center;max-width:720px;margin:0 auto;">
-      <div class="eyebrow">Pricing</div>
       <h2 class="section-title">Free to start. Cheap enough to keep.</h2>
       <p class="section-sub" style="margin-top:18px;">
         Priced for someone paying tuition. One class free, forever — upgrade when you're carrying a full load.
@@ -478,10 +487,9 @@ footer{border-top:1px solid var(--border);padding:64px 0 36px;margin-top:20px;}
 </div>
 
 <!-- ── 8. FAQ ──────────────────────────────────────────────────────── -->
-<div class="reveal section-divider">
+<div class="reveal section-divider" id="faq">
   <div class="inner-mid sec">
     <div style="text-align:center;max-width:720px;margin:0 auto;">
-      <div class="eyebrow">Questions</div>
       <h2 class="section-title">The things people actually ask.</h2>
     </div>
     <div class="faq" id="faqList"></div>
@@ -551,6 +559,20 @@ const IC_CHECK = `<svg class="cmp-ico" width="18" height="18" viewBox="0 0 18 18
 const IC_X = `<svg class="cmp-ico" width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="9" fill="#E4E4E7"/><path d="M6.2 6.2l5.6 5.6M11.8 6.2l-5.6 5.6" stroke="#9A9AA2" stroke-width="1.9" stroke-linecap="round"/></svg>`;
 const IC_TICK = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8.4l3.2 3.2L13 4.8" stroke="#2B3FF0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const IC_DASH = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3.5 8h9" stroke="#2B3FF0" stroke-width="2" stroke-linecap="round"/></svg>`;
+
+/* ── Always open at the top on refresh ────────────────────────────── */
+/* Browsers restore the previous scroll position on reload by default,
+   which drops you mid-page. Opt out — but honor a real #hash link. */
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+/* scrollRestoration alone isn't always honored (some browsers and embedded
+   webviews still restore after load), so force the top at each early
+   milestone — but never fight a real #hash deep link. */
+if (!location.hash) {
+  const toTop = () => window.scrollTo(0, 0);
+  toTop();
+  addEventListener('DOMContentLoaded', toTop, {once:true});
+  addEventListener('load', toTop, {once:true});
+}
 
 /* ── Nav scroll morph ─────────────────────────────────────────────── */
 const navOuter = document.getElementById('navOuter');
@@ -640,7 +662,7 @@ const CMP_GOOD = [
   'Flags what your professor repeated and emphasized',
   "Studies your past exams to match your professor's format",
   'Cites the lecture timestamp, slide number, or page',
-  'Keeps a permanent workspace per class, all semester',
+  'Keeps a permanent class workspace, all semester',
 ];
 document.getElementById('cmpBad').innerHTML =
   CMP_BAD.map(t => `<div class="cmp-item">${IC_X}<span>${t}</span></div>`).join('');
@@ -653,7 +675,7 @@ const FEATS = [
     title:'Every class gets its own AI.',
     body:'Upload the syllabus, slide decks, your notes, old quizzes — whatever the class runs on. Curve reads all of it and answers only from that class. Your orgo workspace knows nothing about your econ class, and that is exactly the point.',
     list:['Unlimited classes, each one fully separate','PDFs, slide decks, images, audio, handwritten notes','Materials stay private to your account'],
-    vis:'Workspace grid — four class cards with progress rings, plus the drag-and-drop upload state',
+    vis:'Class workspace grid — four class cards with progress rings, plus the drag-and-drop upload state',
   },
   {
     title:'Record the lecture. Get the notes.',
@@ -758,7 +780,7 @@ const PRICES = [
   },
   {
     name:'Pro', amt:'$12', per:'/month', feat:true,
-    desc:'For a full course load, when every class needs its own workspace.',
+    desc:'For a full course load, when every class needs its own class workspace.',
     li:['Unlimited class workspaces','20 hours of lecture recording per month','Practice exams matched to your professor','Mastery tracking and nightly study plans','Priority processing during finals'],
     cta:'Get started', solid:true,
   },
@@ -787,7 +809,7 @@ const FAQS = [
   },
   {
     q:'How is this different from just using ChatGPT?',
-    a:'A general chatbot answers from the public internet. Curve answers from your syllabus, your slides, your notes, and your past exams — and cites the specific lecture timestamp, slide, or page it came from, so you can verify it. It also keeps a permanent workspace per class instead of forgetting your course between conversations.',
+    a:'A general chatbot answers from the public internet. Curve answers from your syllabus, your slides, your notes, and your past exams — and cites the specific lecture timestamp, slide, or page it came from, so you can verify it. It also keeps a permanent class workspace instead of forgetting your course between conversations.',
   },
   {
     q:'What can I upload?',
