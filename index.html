@@ -54,7 +54,7 @@ body{
      matches the scrolled state's own margin, so below ~1200px viewport the
      two states share the same edge position and the pill has almost no
      distance left to travel when it forms on scroll. */
-  width:calc(100% - 40px);margin:0 auto;
+  width:calc(100% - 96px);margin:0 auto;
   border-radius:0;padding:18px 48px;
   background:rgba(255,255,255,0);border:1px solid rgba(255,255,255,0);
   box-shadow:0 0 0 rgba(0,0,0,0);
@@ -74,7 +74,7 @@ body{
   box-shadow:0 10px 34px rgba(10,10,10,.14);
 }
 .nav-logo{display:flex;align-items:center;gap:10px;}
-.logo-mark{width:30px;height:30px;border-radius:9px;background:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-mark{width:30px;height:30px;object-fit:contain;flex-shrink:0;display:block;}
 .logo-text{font-family:'Inter',sans-serif;font-weight:600;font-size:16px;color:var(--text);letter-spacing:-.2px;}
 .nav-btn{
   background:var(--text);color:#fff;border:none;border-radius:10px;
@@ -244,7 +244,7 @@ body{
 footer{border-top:1px solid var(--border);padding:28px 0;}
 .foot-row{display:flex;justify-content:space-between;align-items:center;gap:16px;}
 .foot-brand{display:flex;align-items:center;gap:8px;}
-.foot-brand .logo-mark{width:22px;height:22px;border-radius:6px;}
+.foot-brand .logo-mark{width:22px;height:22px;}
 .foot-brand span{font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:var(--text);}
 .foot-copy{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);}
 
@@ -281,11 +281,7 @@ footer{border-top:1px solid var(--border);padding:28px 0;}
 <div class="nav-outer" id="navOuter">
   <div class="nav-pill">
     <div class="nav-logo">
-      <div class="logo-mark">
-        <svg width="17" height="17" viewBox="0 0 20 20" fill="none">
-          <path d="M3 15.5C5.5 15.5 6.5 4.5 10 4.5C13.5 4.5 14.5 15.5 17 15.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
-        </svg>
-      </div>
+      <img class="logo-mark" src="assets/logo.png" alt="Curve.ai" />
       <span class="logo-text">Curve.ai</span>
     </div>
     <div class="nav-right">
@@ -472,11 +468,7 @@ footer{border-top:1px solid var(--border);padding:28px 0;}
 <footer>
   <div class="inner foot-row">
     <div class="foot-brand">
-      <div class="logo-mark">
-        <svg width="13" height="13" viewBox="0 0 20 20" fill="none">
-          <path d="M3 15.5C5.5 15.5 6.5 4.5 10 4.5C13.5 4.5 14.5 15.5 17 15.5" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
-        </svg>
-      </div>
+      <img class="logo-mark" src="assets/logo.png" alt="Curve.ai" />
       <span>Curve.ai</span>
     </div>
     <div class="foot-copy">© <span id="yr"></span> Curve.ai</div>
