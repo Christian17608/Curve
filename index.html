@@ -49,9 +49,12 @@ body{
 .nav-outer.scrolled{padding-top:12px;}
 .nav-pill{
   display:flex;align-items:center;justify-content:space-between;position:relative;
-  /* Full-bleed at rest — no max-width, so it spans edge-to-edge on any screen,
-     matching the hero gradient behind it. */
-  width:100%;margin:0 auto;
+  /* A small permanent 20px inset (still unconstrained by max-width, so it
+     keeps growing on wide screens — the earlier "full page" fix holds) —
+     matches the scrolled state's own margin, so below ~1200px viewport the
+     two states share the same edge position and the pill has almost no
+     distance left to travel when it forms on scroll. */
+  width:calc(100% - 40px);margin:0 auto;
   border-radius:0;padding:18px 48px;
   background:rgba(255,255,255,0);border:1px solid rgba(255,255,255,0);
   box-shadow:0 0 0 rgba(0,0,0,0);
@@ -134,7 +137,7 @@ body{
           mask-image:linear-gradient(to right,transparent 0,#000 260px,#000 calc(100% - 260px),transparent 100%);
 }
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.logos-track{display:flex;align-items:center;width:max-content;animation:marquee 84s linear infinite;will-change:transform;}
+.logos-track{display:flex;align-items:center;width:max-content;animation:marquee 126s linear infinite;will-change:transform;}
 .logos-track:hover{animation-play-state:paused;}
 .logo-item{
   display:flex;align-items:center;gap:11px;padding:0 38px;flex-shrink:0;
@@ -577,7 +580,7 @@ function goSignIn(){
     const half = one.repeat(reps);
     track.innerHTML = half + half;
     // Keep the scroll speed constant (~45 px/s) regardless of how many reps.
-    track.style.animationDuration = ((setW * reps) / 45).toFixed(1) + 's';
+    track.style.animationDuration = ((setW * reps) / 30).toFixed(1) + 's';
   }
   build();
   let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(build, 250); });
